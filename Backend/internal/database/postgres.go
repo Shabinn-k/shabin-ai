@@ -28,7 +28,7 @@ func Connect() {
 
 
 func migrate() {
-	schema := `
+	schema := `r
 	CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 	CREATE TABLE IF NOT EXISTS users (
