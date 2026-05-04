@@ -15,7 +15,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-// ── JWT Claims ────────────────────────────────────────────
 
 type Claims struct {
 	UserID string `json:"user_id"`
@@ -24,7 +23,6 @@ type Claims struct {
 	jwt.RegisteredClaims
 }
 
-// ── Password ──────────────────────────────────────────────
 
 func HashPassword(plain string) (string, error) {
 	b, err := bcrypt.GenerateFromPassword([]byte(plain), 12)
@@ -35,7 +33,6 @@ func CheckPassword(plain, hash string) bool {
 	return bcrypt.CompareHashAndPassword([]byte(hash), []byte(plain)) == nil
 }
 
-// ── Access Token ──────────────────────────────────────────
 
 func GenerateAccessToken(u *models.User) (string, error) {
 	exp := time.Now().Add(time.Duration(config.App.JWTExpiryHours) * time.Hour)
@@ -70,7 +67,6 @@ func ParseAccessToken(raw string) (*Claims, error) {
 	return c, nil
 }
 
-// ── Refresh Token ─────────────────────────────────────────
 
 func HashToken(raw string) string {
 	h := sha256.Sum256([]byte(raw))
@@ -109,7 +105,6 @@ func ValidateRefreshToken(raw string) (string, error) {
 		_, _ = database.DB.Exec(`DELETE FROM refresh_tokens WHERE token_hash = $1`, h)
 		return "", errors.New("token expired")
 	}
-	// Rotate: delete after use
 	_, _ = database.DB.Exec(`DELETE FROM refresh_tokens WHERE token_hash = $1`, h)
 	return userID, nil
 }
@@ -119,7 +114,6 @@ func RevokeRefreshToken(raw string) {
 	_, _ = database.DB.Exec(`DELETE FROM refresh_tokens WHERE token_hash = $1`, h)
 }
 
-// ── User Lookup ───────────────────────────────────────────
 
 func GetUserByID(id string) (*models.User, error) {
 	row := database.DB.QueryRow(

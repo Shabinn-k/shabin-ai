@@ -13,7 +13,6 @@ interface AuthState {
   setHydrated: () => void
 }
 
-// Helper to set cookie for middleware
 const setCookie = (name: string, value: string, days = 7) => {
   if (typeof document === 'undefined') return
   const expires = new Date()
@@ -34,7 +33,6 @@ export const useAuthStore = create<AuthState>()(
       user: null,
       isHydrated: false,
       setAuth: (token, refreshToken, user) => {
-        // Set cookie for middleware
         setCookie('shabin-auth', token, 7)
         set({ token, refreshToken, user })
       },

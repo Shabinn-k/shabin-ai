@@ -27,7 +27,6 @@ func AdminListUsers(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"users": users})
 }
 
-// PATCH /api/admin/users/:id
 func AdminUpdateUser(c *gin.Context) {
 	targetID := c.Param("id")
 	var req struct {
@@ -47,7 +46,6 @@ func AdminUpdateUser(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "updated"})
 }
 
-// GET /api/admin/stats
 func AdminStats(c *gin.Context) {
 	var s struct {
 		TotalUsers    int     `json:"total_users"`

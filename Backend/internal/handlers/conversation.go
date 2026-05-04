@@ -12,7 +12,6 @@ import (
 	"github.com/google/uuid"
 )
 
-// GET /api/conversations
 func ListConversations(c *gin.Context) {
 	uid := c.GetString("user_id")
 	rows, err := database.DB.Query(
@@ -34,7 +33,6 @@ func ListConversations(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"conversations": convs})
 }
 
-// GET /api/conversations/:id/messages
 func GetMessages(c *gin.Context) {
 	uid := c.GetString("user_id")
 	convID := c.Param("id")
@@ -65,7 +63,6 @@ func GetMessages(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"messages": msgs})
 }
 
-// DELETE /api/conversations/:id
 func DeleteConversation(c *gin.Context) {
 	uid := c.GetString("user_id")
 	convID := c.Param("id")
@@ -82,7 +79,6 @@ func DeleteConversation(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "deleted"})
 }
 
-// PATCH /api/conversations/:id/title
 func RenameConversation(c *gin.Context) {
 	uid := c.GetString("user_id")
 	convID := c.Param("id")
@@ -100,7 +96,6 @@ func RenameConversation(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "renamed"})
 }
 
-// GET /api/prompts
 func ListPrompts(c *gin.Context) {
 	uid := c.GetString("user_id")
 	rows, err := database.DB.Query(
@@ -120,7 +115,6 @@ func ListPrompts(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"prompts": prompts})
 }
 
-// POST /api/prompts
 func CreatePrompt(c *gin.Context) {
 	uid := c.GetString("user_id")
 	var req struct {
@@ -142,7 +136,6 @@ func CreatePrompt(c *gin.Context) {
 	}})
 }
 
-// DELETE /api/prompts/:id
 func DeletePrompt(c *gin.Context) {
 	uid := c.GetString("user_id")
 	res, _ := database.DB.Exec(`DELETE FROM saved_prompts WHERE id=$1 AND user_id=$2`, c.Param("id"), uid)
@@ -154,7 +147,6 @@ func DeletePrompt(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "deleted"})
 }
 
-// GET /api/usage
 func GetUsage(c *gin.Context) {
 	uid := c.GetString("user_id")
 	var total struct {
