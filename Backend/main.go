@@ -22,6 +22,6 @@ func main() {
 
 	r := router.Setup()
 	addr := fmt.Sprintf(":%s", config.App.Port)
-	log.Printf("🚀 Shabin AI backend running on %s", addr)
+	log.Printf("Shabin AI backend running on %s", addr)
 	log.Fatal(r.Run(addr))
 }
