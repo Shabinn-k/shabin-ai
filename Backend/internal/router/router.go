@@ -17,7 +17,7 @@ func Setup() *gin.Engine {
 	r.Static("/uploads", config.App.UploadDir)
 
 	api := r.Group("/api")
-
+	
 	// ── Public auth routes ────────────────────────────────
 	auth := api.Group("/auth")
 	{
