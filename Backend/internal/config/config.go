@@ -9,41 +9,42 @@ import (
 )
 
 type Config struct {
-	Port                string
-	DatabaseURL         string
-	JWTSecret           string
-	JWTRefreshSecret    string
-	JWTExpiryHours      int
+	Port                 string
+	DatabaseURL          string
+	JWTSecret            string
+	JWTRefreshSecret     string
+	JWTExpiryHours       int
 	JWTRefreshExpiryDays int
-	AnthropicAPIKey     string
-	OpenAIAPIKey        string
-	GoogleClientID      string
-	GoogleClientSecret  string
-	GoogleRedirectURL   string
-	FrontendURL         string
-	UploadDir           string
-	MaxUploadMB         int64
+	AnthropicAPIKey      string
+	OpenAIAPIKey         string
+	AIProvider           string
+	GoogleClientID       string
+	GoogleClientSecret   string
+	GoogleRedirectURL    string
+	FrontendURL          string
+	UploadDir            string
+	MaxUploadMB          int64
 }
 
 var App *Config
 
 func Load() {
-	if err := godotenv.Load(); err != nil {
-		log.Println("No .env file, reading from environment")
-	}
+	_ = godotenv.Load()
+
 	jwtHours, _ := strconv.Atoi(getEnv("JWT_EXPIRY_HOURS", "24"))
-	jwtDays, _  := strconv.Atoi(getEnv("JWT_REFRESH_EXPIRY_DAYS", "30"))
-	maxMB, _    := strconv.ParseInt(getEnv("MAX_UPLOAD_MB", "10"), 10, 64)
+	jwtDays, _ := strconv.Atoi(getEnv("JWT_REFRESH_EXPIRY_DAYS", "30"))
+	maxMB, _ := strconv.ParseInt(getEnv("MAX_UPLOAD_MB", "10"), 10, 64)
 
 	App = &Config{
 		Port:                 getEnv("PORT", "8080"),
-		DatabaseURL:          mustGetEnv("DATABASE_URL"),
-		JWTSecret:            mustGetEnv("JWT_SECRET"),
-		JWTRefreshSecret:     mustGetEnv("JWT_REFRESH_SECRET"),
+		DatabaseURL:          mustEnv("DATABASE_URL"),
+		JWTSecret:            mustEnv("JWT_SECRET"),
+		JWTRefreshSecret:     mustEnv("JWT_REFRESH_SECRET"),
 		JWTExpiryHours:       jwtHours,
 		JWTRefreshExpiryDays: jwtDays,
 		AnthropicAPIKey:      getEnv("ANTHROPIC_API_KEY", ""),
 		OpenAIAPIKey:         getEnv("OPENAI_API_KEY", ""),
+		AIProvider:           getEnv("AI_PROVIDER", "anthropic"),
 		GoogleClientID:       getEnv("GOOGLE_CLIENT_ID", ""),
 		GoogleClientSecret:   getEnv("GOOGLE_CLIENT_SECRET", ""),
 		GoogleRedirectURL:    getEnv("GOOGLE_REDIRECT_URL", ""),
@@ -54,11 +55,16 @@ func Load() {
 }
 
 func getEnv(key, fallback string) string {
-	if v := os.Getenv(key); v != "" { return v }
+	if v := os.Getenv(key); v != "" {
+		return v
+	}
 	return fallback
 }
-func mustGetEnv(key string) string {
+
+func mustEnv(key string) string {
 	v := os.Getenv(key)
-	if v == "" { log.Fatalf("Required env var %s is not set", key) }
+	if v == "" {
+		log.Fatalf("[config] required env var %q is not set", key)
+	}
 	return v
 }
