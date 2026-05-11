@@ -114,12 +114,12 @@ export default function MessageBubble({ message, isStreaming = false }: Props) {
                 remarkPlugins={[remarkGfm]}
                 components={{
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  code({ node, inline, className, children, ...props }: any) {
+                 code({ className, children, ...props }: any){
                     const match = /language-(\w+)/.exec(className || '')
                     const lang = match?.[1] ?? ''
                     const code = String(children).replace(/\n$/, '')
 
-                    if (!inline && (lang || code.includes('\n'))) {
+                    if (lang || code.includes('\n')){
                       return <CodeBlock code={code} language={lang} />
                     }
                     return (

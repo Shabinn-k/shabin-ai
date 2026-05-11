@@ -85,22 +85,17 @@ export default function ChatInput({
       toast.error('Voice input not supported in your browser.')
       return
     }
-    const SR =
-      (window as unknown as { SpeechRecognition: typeof SpeechRecognition })
-        .SpeechRecognition ||
-      (
-        window as unknown as {
-          webkitSpeechRecognition: typeof SpeechRecognition
-        }
-      ).webkitSpeechRecognition
-
-    const recognition = new SR()
+    
+    const SpeechRecognitionAPI = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
+    const recognition = new SpeechRecognitionAPI()
+    
     recognition.lang = 'en-US'
     recognition.interimResults = false
+    recognition.continuous = false
 
     recognition.onstart = () => setIsListening(true)
     recognition.onend = () => setIsListening(false)
-    recognition.onresult = (event: SpeechRecognitionEvent) => {
+    recognition.onresult = (event: any) => {
       const transcript = event.results[0][0].transcript
       setText((prev) => (prev ? prev + ' ' + transcript : transcript))
       autoResize()
@@ -109,6 +104,7 @@ export default function ChatInput({
       setIsListening(false)
       toast.error('Voice recognition failed.')
     }
+    
     recognition.start()
   }
 

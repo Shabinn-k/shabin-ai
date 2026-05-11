@@ -23,13 +23,17 @@ export function middleware(request: NextRequest) {
 
   const token = request.cookies.get('shabin-auth')?.value
 
-  // Rough check: parse Zustand persisted state from cookie
-  // In production, use an httpOnly cookie set by your auth endpoints
+  // Parse Zustand persisted state from cookie - check if token exists
   const isAuthenticated = !!token
 
   // If user hits auth page while logged in, redirect to chat
   if (AUTH_PATHS.some((p) => pathname === p) && isAuthenticated) {
     return NextResponse.redirect(new URL('/chat', request.url))
+  }
+
+  // Protect /chat and /admin routes
+  if ((pathname.startsWith('/chat') || pathname.startsWith('/admin')) && !isAuthenticated) {
+    return NextResponse.redirect(new URL('/login', request.url))
   }
 
   return NextResponse.next()
