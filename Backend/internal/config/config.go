@@ -17,7 +17,6 @@ type Config struct {
 	JWTRefreshExpiryDays int
 	GEMINI_API_KEY      string
 	AI_PROVIDER		string
-	// OpenAIAPIKey         string 
 	GoogleClientID       string
 	GoogleClientSecret   string
 	GoogleRedirectURL    string
@@ -43,8 +42,7 @@ func Load() {
 		JWTExpiryHours:       jwtHours,
 		JWTRefreshExpiryDays: jwtDays,
 		AI_PROVIDER	:getEnv("AI_PROVIDER", "gemini"),
-		GEMINI_API_KEY:      getEnv("GEMINI_API_KEY", ""),
-		// OpenAIAPIKey:         getEnv("OPENAI_API_KEY", ""), 
+		GEMINI_API_KEY:      getEnv("GEMINI_API_KEY", ""), 
 		GoogleClientID:       getEnv("GOOGLE_CLIENT_ID", ""),
 		GoogleClientSecret:   getEnv("GOOGLE_CLIENT_SECRET", ""),
 		GoogleRedirectURL:    getEnv("GOOGLE_REDIRECT_URL", ""),

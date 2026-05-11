@@ -8,7 +8,6 @@ import (
 	"golang/internal/models"
 )
 
-// GET /api/admin/users
 func AdminListUsers(c *gin.Context) {
 	rows, err := database.DB.Query(
 		`SELECT id,name,email,password_hash,avatar_url,provider,provider_id,role,is_active,created_at,updated_at
